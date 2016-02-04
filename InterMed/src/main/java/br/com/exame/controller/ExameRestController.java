@@ -37,7 +37,7 @@ public class ExameRestController {
 			){
 		
 		Pessoa pessoa = getPessoaPorCpf(cpfPessoa);
-		Clinica clinica = getClinicaPorCnpj(cnpjClinica);
+		Clinica clinica = getClinicaPorCnpj(cnpjClinica); 
 
 		return saveExame(resultado, urlImagem, pessoa, clinica);
 	}
