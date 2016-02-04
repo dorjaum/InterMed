@@ -14,9 +14,7 @@ public class Pessoa {
 	private String nome;
 	private String cpf;
 	
-	protected Pessoa(){
-		
-	}
+	protected Pessoa(){}
 	
 	public Pessoa(String nome, String cpf){
 		this.setNome(nome);

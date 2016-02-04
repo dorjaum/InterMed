@@ -4,15 +4,13 @@ package br.com.exame.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.inject.Inject;
 
 import org.h2.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import br.com.exame.dao.PessoaRepositoryDAO;
 import br.com.exame.entity.Pessoa;
 import br.com.exame.exception.PessoaException;
 import br.com.exame.exception.PessoaExcetpion;
@@ -25,11 +23,22 @@ public class PessoaRestController {
 
 	private static final String DADOS_INCOMPLETOS = "Cadastro de pessoa com dados incompletos, dados devem conter \"nome\" e \"cpf\"";
 	private static final String PESSOA_JA_CADASTRADA_COM_ESSE_CPF = "Pessoa ja cadastrada com esse cpf";
-	PessoaRepositoryDAO pessoaRepository;
+
+	PessoaService pessoaService;
 	
+	@Inject
+	public PessoaRestController(PessoaService pessoaService) {
+		this.pessoaService = pessoaService;
+	}
+
+	/**
+	 * 
+	 * @param nome, pessoa a ser cadastrada.
+	 * @param cpf, identificacao unica de cada pessoa.
+	 * @return
+	 */
 	@RequestMapping( value="/cadastra")
-	public Pessoa cadastraPessoa(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(value="nome") String nome, 
+	public Pessoa cadastraPessoa(@RequestParam(value="nome") String nome, 
 			@RequestParam(value="cpf") String cpf ){
 		
 		validaDadosEntrada(nome);
@@ -39,9 +48,23 @@ public class PessoaRestController {
 		return savePessoa(nome, cpf);
 	}
 
+	/**
+	 * Retorna todas as pessoas presentes na base
+	 * @return Entidade Pessoa
+	 */
 	@RequestMapping(value="/todos", method=RequestMethod.GET)
 	public List<Pessoa> todasPessoas(){
 		return PessoaServiceImpl.getInstance().findAll();
+	}
+	
+	/**
+	 * Retorna a pessoa cadastrada na base para determinado cpf
+	 * @param cpf
+	 * @return Entidade Pessoa
+	 */
+	@RequestMapping(value="/findPessoaByCpf", method=RequestMethod.GET)
+	public Pessoa findPessoaByCpf(@RequestParam(value="cpf") String cpf){
+		return PessoaServiceImpl.getInstance().findPessoaByCpf(cpf);
 	}
 	
 	private Pessoa savePessoa(String nome, String cpf) {
@@ -50,11 +73,11 @@ public class PessoaRestController {
 	}
 	
 	private void validaCpfExiste(String cpf) {
-		Pessoa findPessoaByCpf = PessoaServiceImpl.getInstance().findPessoaByCpf(cpf);
-		if(findPessoaByCpf != null){
+		Pessoa pessoa = PessoaServiceImpl.getInstance().findPessoaByCpf(cpf);
+		
+		if(pessoa != null){
 			throw new PessoaException(PESSOA_JA_CADASTRADA_COM_ESSE_CPF);
 		}
-		
 	}
 	
 	private void validaDadosEntrada(String dados) {

@@ -1,2 +1,8 @@
 .metadata/*
 InterMed/target/*
+InterMed/target/*
+RemoteSystemsTempFiles
+InterMed/target*
+InterMed/target*
+InterMed/target/
+InterMed/target/*

@@ -12,18 +12,26 @@ public class Exame {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
 	@OneToOne
 	private Pessoa pessoa;
-	@OneToOne
 
+	@OneToOne
 	private Clinica clinica;
+
 	private String resultado;
 	private String urlImagem;
 
-	
-	public Exame(){
+	protected Exame() {}
+
+	public Exame(Pessoa pessoa, Clinica clinica, String resultado,
+			String urlImagem) {
+		this.setPessoa(pessoa); 
+		this.setClinica(clinica); 
+		this.setResultado(resultado);
+		this.setUrlImagem(urlImagem);
 	}
-	
+
 	public Pessoa getPessoa() {
 		return pessoa;
 	}
@@ -31,19 +39,9 @@ public class Exame {
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
 	}
-	public Long getId(){
-		return id;
-	}
-	
-	public Exame(Pessoa pessoa, String resultado) {
-		this.pessoa = pessoa;
-		this.resultado = resultado;
-	}
 
-	public Exame(Pessoa pessoa, Clinica clinica, String resultado, String urlImagem) {
-		this.pessoa = pessoa;
-		this.clinica = clinica;
-		this.resultado = resultado;
+	public Long getId() {
+		return id;
 	}
 
 	public String getResultado() {
@@ -60,5 +58,13 @@ public class Exame {
 
 	public void setClinica(Clinica clinica) {
 		this.clinica = clinica;
+	}
+
+	public String getUrlImagem() {
+		return urlImagem;
+	}
+
+	public void setUrlImagem(String urlImagem) {
+		this.urlImagem = urlImagem;
 	}
 }

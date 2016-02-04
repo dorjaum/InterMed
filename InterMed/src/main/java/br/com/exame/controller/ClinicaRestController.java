@@ -21,8 +21,14 @@ public class ClinicaRestController {
 	private static final String CLINICA_COM_CNPJ_JA_CADASTRADO = "Clinica com cnpj ja cadastrado";
 	private static final String DADOS_INCOMPLETOS = "Dados da clinica incompletos, os dados passados devem ser \"razaoSocial\" e \"cnpj\"";
 
+	/**
+	 * Cadastra uma clinica levando-se em conta apenas a razao social e o cnpj.
+	 * @param razaoSocial
+	 * @param cnpj
+	 * @return Clinica
+	 */
 	@RequestMapping("/cadastra")
-	public Clinica cadastra(HttpServletRequest request, HttpServletResponse response, 
+	public Clinica cadastra(
 			@RequestParam(value="razaoSocial") String razaoSocial,
 			@RequestParam(value="cnpj") String cnpj){
 		
@@ -31,6 +37,25 @@ public class ClinicaRestController {
 		validaCnpjExistente(cnpj);
 		
 		return ClinicaServiceImpl.getInstance().save(new Clinica(razaoSocial, cnpj));
+	}
+	
+	/**
+	 * Retorna todas as clinicas cadastradas na base.
+	 * @return List<Clinica>
+	 */
+	@RequestMapping("/todos")
+	public List<Clinica> todos(){
+		return ClinicaServiceImpl.getInstance().findAllClinica();
+	}
+	
+	/**
+	 * Retorna clinica associada ao cnpj.
+	 * @param cnpj
+	 * @return Clinica
+	 */
+	@RequestMapping("/findClinicaByCnpj")
+	public Clinica findClinicaByCnpj(@RequestParam(value="cnpj") String cnpj){
+		return ClinicaServiceImpl.getInstance().findClinicaByCnpj(cnpj);
 	}
 	
 	private void validaCnpjExistente(String cnpj) {
@@ -46,8 +71,4 @@ public class ClinicaRestController {
 		}
 	}
 
-	@RequestMapping("/todos")
-	public List<Clinica> todos(){
-		return ClinicaServiceImpl.getInstance().findAllClinica();
-	}
 }

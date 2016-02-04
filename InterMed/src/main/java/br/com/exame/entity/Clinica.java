@@ -15,7 +15,7 @@ public class Clinica {
 	private String cnpj;
 	private String razaoSocial;
 	
-	public Clinica(){}
+	protected Clinica(){}
 	
 	public Clinica(String razaoSocial, String cnpj){
 		this.razaoSocial = razaoSocial;

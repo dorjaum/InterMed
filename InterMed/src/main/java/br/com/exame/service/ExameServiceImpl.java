@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.exame.Application;
 import br.com.exame.dao.ExameRepositoryDAO;
+import br.com.exame.entity.Clinica;
 import br.com.exame.entity.Exame;
 import br.com.exame.entity.Pessoa;
 
@@ -36,6 +37,10 @@ public class ExameServiceImpl implements ExameService {
 
 	public List<Exame> findAllByPessoa(Pessoa pessoa) {
 		return exameRespositoryDAO.findAllByPessoa(pessoa);
+	}
+
+	public List<Exame> findAllByClinica(Clinica clinica) {
+		return exameRespositoryDAO.findAllByClinica(clinica);
 	}
 	
 
