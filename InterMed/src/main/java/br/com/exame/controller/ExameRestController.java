@@ -39,7 +39,7 @@ public class ExameRestController {
 	public Exame cadastra(
 			@RequestParam(value="cpfPessoa") String cpfPessoa,
 			@RequestParam(value="cnpjClinica") String cnpjClinica,
-			@RequestParam(value="resultado", defaultValue="") String resultado,
+			@RequestParam(value="resultado") String resultado,
 			@RequestParam(value="urlImagem", defaultValue="") String urlImagem
 			){
 		
@@ -56,7 +56,7 @@ public class ExameRestController {
 	 * @return List<Exame>
 	 */
 	@RequestMapping("/todosPorPessoa")
-	public List<Exame> todosPorPessoa(@RequestParam(value="idPessoa") String cpf){
+	public List<Exame> todosPorPessoa(@RequestParam(value="cpf") String cpf){
 		Pessoa pessoa = PessoaServiceImpl.getInstance().findPessoaByCpf(cpf);
 		return ExameServiceImpl.getInstance().findAllByPessoa(pessoa);
 	}

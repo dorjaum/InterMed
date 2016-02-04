@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.exame.entity.Clinica;
 import br.com.exame.exception.ClinicaExcetpion;
 import br.com.exame.service.ClinicaServiceImpl;
+import br.com.exame.utils.ValidadorUtils;
 
 @RestController
 @RequestMapping("/clinica")
 public class ClinicaRestController {
 
+	private static final String CNPJ_FORNECIDO_INVALIDO = "Cnpj fornecido inválido";
 	private static final String CLINICA_COM_CNPJ_JA_CADASTRADO = "Clinica com cnpj ja cadastrado";
 	private static final String DADOS_INCOMPLETOS = "Dados da clinica incompletos, os dados passados devem ser \"razaoSocial\" e \"cnpj\"";
 
@@ -29,8 +31,8 @@ public class ClinicaRestController {
 			@RequestParam(value="razaoSocial") String razaoSocial,
 			@RequestParam(value="cnpj") String cnpj){
 		
-		validaDadosEntrada(razaoSocial);
-		validaDadosEntrada(cnpj);
+		validaDadosRazaoSocial(razaoSocial);
+		validaDadosCnpj(cnpj);
 		validaCnpjExistente(cnpj);
 		
 		return ClinicaServiceImpl.getInstance().save(new Clinica(razaoSocial, cnpj));
@@ -62,9 +64,19 @@ public class ClinicaRestController {
 		}
 	}
 
-	private void validaDadosEntrada(String dados) {
+	private void validaDadosRazaoSocial(String dados) {
 		if(StringUtils.isNullOrEmpty(dados)){
 			throw new ClinicaExcetpion(DADOS_INCOMPLETOS);
+		}
+	}
+	
+	private void validaDadosCnpj(String cnpj) {
+		if(StringUtils.isNullOrEmpty(cnpj)){
+			throw new ClinicaExcetpion(DADOS_INCOMPLETOS);
+		}
+		
+		if(!ValidadorUtils.isCnpjValido(cnpj)){
+			throw new ClinicaExcetpion(CNPJ_FORNECIDO_INVALIDO);
 		}
 	}
 

@@ -16,11 +16,13 @@ import br.com.exame.exception.PessoaException;
 import br.com.exame.exception.PessoaExcetpion;
 import br.com.exame.service.PessoaService;
 import br.com.exame.service.PessoaServiceImpl;
+import br.com.exame.utils.ValidadorUtils;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/pessoa")
 public class PessoaRestController {
 
+	private static final String CPF_FORNECIDO_POSSUI_VALOR_INVALIDO = "Cpf fornecido possui valor inválido";
 	private static final String DADOS_INCOMPLETOS = "Cadastro de pessoa com dados incompletos, dados devem conter \"nome\" e \"cpf\"";
 	private static final String PESSOA_JA_CADASTRADA_COM_ESSE_CPF = "Pessoa ja cadastrada com esse cpf";
 
@@ -41,8 +43,8 @@ public class PessoaRestController {
 	public Pessoa cadastraPessoa(@RequestParam(value="nome") String nome, 
 			@RequestParam(value="cpf") String cpf ){
 		
-		validaDadosEntrada(nome);
-		validaDadosEntrada(cpf);
+		validaDadosNome(nome);
+		validaDadosCpf(cpf);
 		validaCpfExiste(cpf);
 		
 		return savePessoa(nome, cpf);
@@ -80,9 +82,20 @@ public class PessoaRestController {
 		}
 	}
 	
-	private void validaDadosEntrada(String dados) {
-		if(StringUtils.isNullOrEmpty(dados)){
+	private void validaDadosNome(String nome) {
+		if(StringUtils.isNullOrEmpty(nome)){
 			throw new PessoaExcetpion(DADOS_INCOMPLETOS);
+		}
+	}
+	
+
+	private void validaDadosCpf(String cpf) {
+		if(StringUtils.isNullOrEmpty(cpf)){
+			throw new PessoaExcetpion(DADOS_INCOMPLETOS);
+		}
+		
+		if(!ValidadorUtils.isCpfValido(cpf)){
+			throw new PessoaExcetpion(CPF_FORNECIDO_POSSUI_VALOR_INVALIDO);
 		}
 	}
 }
