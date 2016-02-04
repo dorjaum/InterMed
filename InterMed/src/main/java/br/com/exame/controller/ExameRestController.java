@@ -2,10 +2,6 @@ package br.com.exame.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +36,7 @@ public class ExameRestController {
 	 * @return Exame
 	 */
 	@RequestMapping("/cadastra")
-	public Exame cadastraPorCpf(
+	public Exame cadastra(
 			@RequestParam(value="cpfPessoa") String cpfPessoa,
 			@RequestParam(value="cnpjClinica") String cnpjClinica,
 			@RequestParam(value="resultado", defaultValue="") String resultado,
